@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>mk.js</title>
-    <script src="src/movement.js"></script>
-    <script src="src/mk.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="styles/styles.css" />
-</head>
+    <head>
+        <title>mk.js</title>
+        <script src="src/movement.js"></script>
+        <script src="src/mk.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="styles/styles.css" />
+    </head>
 <body>
     <table>
     <thead>
@@ -20,10 +20,17 @@
     </thead>
     <tbody>
         <tr>
-            <td> 
-                <div id="paddle" style="background-color: white;">
-                    <img src="images/controls/gamepad.svg" style="height:100px; width:100px;" />
-                </div>
+            <td style="vertical-align: bottom;"> 
+                <div id="wrapper">
+                    <div id="controls">
+                      <button id="keyboard_key_up" class="movements_control">🢁</button>
+                      <button id="keyboard_key_left" class="movements_control">🢀</button>
+                      <button id="keyboard_key_down" class="movements_control">🢃</button>
+                      <button id="keyboard_key_right" class="movements_control">🢂</button>
+                    </div>
+                  </div>                
+                
+                
             </td>
             <td>
                 <div id="parent">
@@ -40,9 +47,17 @@
                     </div>
                 </div>
             </td>
-            <td>
-                <div id="buttons">
-                    
+            <td style="vertical-align: bottom;">
+                <div class="right_commands_high" style="font-family: 'Press Start 2p';">
+                    <span class='video-game-button' id="keyboard_key_highpunch">HP</span>
+                    <span class='video-game-button' id="keyboard_key_highkick">HK</span> 
+                </div>
+                <div class="right_commands_mid" style="font-family: 'Press Start 2p';">
+                    <span class='video-game-button' id="keyboard_key_lowpunch">LP</span>
+                    <span class='video-game-button' id="keyboard_key_lowkick">LK</span> 
+                </div>
+                <div class="right_commands_low" style="font-family: 'Press Start 2p';">
+                    <span class='video-game-button vgblarge' id="keyboard_key_block">BL</span>
                 </div>
             </td>
             <!-- <td id="webcam-parent">
@@ -126,6 +141,7 @@
                 }
                 
                 startNewGame();
+                //var gamepad = game.plugins.add(Phaser.Plugin.VirtualGamepad);
                 
             }());
 

@@ -199,13 +199,13 @@
   mk.controllers.Basic.prototype._initialize = function () {
     this._player = 0;
     this._addHandlers();
-  };
+  };  
 
   mk.controllers.Basic.prototype._addHandlers = function () {
     var pressed = {},
       self = this,
       f = this.fighters[this._player];
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {      
       pressed[e.keyCode] = true;
       var move = self._getMove(pressed, mk.controllers.keys, self._player);
       self._moveFighter(f, move);
@@ -215,7 +215,39 @@
       var move = self._getMove(pressed, mk.controllers.keys, self._player);
       self._moveFighter(f, move);
     }, false);
+
+    //touch handlers
+    //direction
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_left', mk.controllers.keys.LEFT, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_right', mk.controllers.keys.RIGHT, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_up', mk.controllers.keys.UP, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_down', mk.controllers.keys.DOWN, f);    
+
+    //action buttons
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_highpunch', mk.controllers.keys.HP, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_lowpunch', mk.controllers.keys.LP, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_highkick', mk.controllers.keys.HK, f);
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_lowkick', mk.controllers.keys.LK, f); 
+    
+    self._addTouchEventHandlers(self, pressed, 'keyboard_key_block', mk.controllers.keys.BLOCK, f); 
   };
+
+  mk.controllers.Basic.prototype._addTouchEventHandlers = (self, pressed, element, direction, fighter) => {
+    var button = document.getElementById(element);
+    //console.log('button: ', button);
+    //touchstart
+    button.addEventListener('touchstart', function (e) {
+      pressed[direction] = true;
+      var move = self._getMove(pressed, mk.controllers.keys, self._player);
+      self._moveFighter(fighter, move);
+    }, false);
+    //touchend
+    button.addEventListener('touchend', function (e) {
+      delete pressed[direction];
+      var move = self._getMove(pressed, mk.controllers.keys, self._player);
+      self._moveFighter(fighter, move);
+    }, false);
+  }
 
   mk.controllers.Basic.prototype._moveFighter = function (f, m) {
     if (m) {
@@ -410,6 +442,7 @@
       f2 = this.fighters[1];
 
     document.addEventListener('keydown', function (e) {
+      console.log('keydown')
       pressed[e.keyCode] = true;
       var move = self._getMove(pressed, mk.controllers.keys.p1, 0);
       self._moveFighter(f1, move);
@@ -418,15 +451,19 @@
     }, false);
 
     document.addEventListener('keyup', function (e) {
+      console.log('keyup')
       delete pressed[e.keyCode];
       var move = self._getMove(pressed, mk.controllers.keys.p1, 0);
       self._moveFighter(f1, move);
       move = self._getMove(pressed, mk.controllers.keys.p2, 1);
       self._moveFighter(f2, move);
     }, false);
+
+    console.log('jquery check ', $);
   };
 
   mk.controllers.Multiplayer.prototype._moveFighter = function (fighter, move) {
+    console.log('move')
     if (move) {
       fighter.setMove(move);
     }
@@ -520,6 +557,7 @@
   };
 
   mk.controllers.Network.prototype._moveFighter = function (f, m) {
+    //console.log('_moveFighter')
     if (m) {
       this._transport.emit('event', m);
       f.setMove(m);
